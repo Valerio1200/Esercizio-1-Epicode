@@ -1,7 +1,9 @@
 import cpuinfo
 from reportlab.pdfgen import canvas
 from reportlab.lib.pagesizes import letter
-
+import psutil
+import os
+hdd = psutil.disk_usage('/')
 def form(path):
     my_canvas = canvas.Canvas(path, pagesize=letter)
     my_canvas.setLineWidth(.3)
@@ -21,10 +23,25 @@ def form(path):
     my_canvas.drawString(30, 490, 'Venditore: ' + cpuinfo.get_cpu_info()['vendor_id_raw'])
     my_canvas.drawString(30, 470, 'Dimensione delle cache L2: ' + str(cpuinfo.get_cpu_info()['l2_cache_size']))
     my_canvas.drawString(30, 450, 'Dimensione delle cache L3: ' + str(cpuinfo.get_cpu_info()['l3_cache_size']))
+    my_canvas.drawString(30, 420, 'Cpu in uso: ' + str(psutil.cpu_percent(4)) + ' %')
+    my_canvas.setFont('Helvetica', 20)
+    my_canvas.drawString(200, 400, 'Caratteristiche RAM: ')
+    my_canvas.setFont('Helvetica', 12)
+    my_canvas.drawString(30, 380, 'Ram totale installata: ' + str(round(psutil.virtual_memory().total/1000000000, 2)) + 'GB')
+    my_canvas.drawString(30, 360, 'Ram disponibile: ' + str(round(psutil.virtual_memory().available/1000000000, 2)) + 'GB')
+    my_canvas.drawString(30, 340, 'Ram utilizzata: ' + str(round(psutil.virtual_memory().used/1000000000, 2)) +  'GB')
+    my_canvas.drawString(30, 320, 'Percentuale di ram in Uso: ' + str(psutil.virtual_memory().percent) + ' %') 
+    my_canvas.setFont('Helvetica', 20)
+    my_canvas.drawString(200, 300, 'Caratteristiche HardDisk: ')
+    my_canvas.setFont('Helvetica', 12)                 
+    my_canvas.drawString(30, 280, 'Spazio Totale disponibile: ' + str(hdd.total / (2**30)) + ' GB')
+    my_canvas.drawString(30, 260, 'Spazio in uso: ' + str(hdd.used / (2**30)) + ' GB')
+    my_canvas.drawString(30, 240, 'Spazio libero: ' + str(hdd.free / (2**30)) + ' GB')
+    my_canvas.drawString(30, 220, 'Tipologia di hard-disk:  SSD')
     my_canvas.save()
 if __name__ == '__main__':
     form('cpucompilato.pdf')
 
 print("Documento salvato con successo")
 
-#print('CPU =', cpuinfo.get_cpu_info()['brand_raw'])
+
