@@ -7,6 +7,7 @@ hdd = psutil.disk_usage('/')
 def form(path):
     my_canvas = canvas.Canvas(path, pagesize=letter)
     my_canvas.setLineWidth(.3)
+    my_canvas.setTitle('Compito Mendolia Valerio')
     my_canvas.setFont('Helvetica', 20)
     my_canvas.drawString(200, 750, 'Compito Mendolia Valerio')
     my_canvas.setFont('Helvetica', 12)
